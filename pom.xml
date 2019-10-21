@@ -71,8 +71,6 @@
 			<artifactId>kaptcha</artifactId>
 			<version>2.3.2</version>
 		</dependency>
-		<!--madown转html-->
-
 	</dependencies>
 
 	<build>
@@ -107,7 +105,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.wyc.BlogApplication</mainClass>
+					<mainClass>com.cdivtc.BlogApplication</mainClass>
 				</configuration>
 				<executions>
 					<execution>

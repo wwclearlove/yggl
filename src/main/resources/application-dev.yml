@@ -1,15 +1,15 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://39.106.123.27:3306/yggl?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://39.106.123.27:3306/ttss?useUnicode=true&characterEncoding=utf-8
     username: root
     password: 123456
+  resources:
+      static-locations: classpath:/
 logging:
   level:
     root: warn
     com.lrm: debug
-  file: log/yggl-dev.log
+  file: log/ttss-dev.log
 server:
-  port: 8080
-
-
+  port: 8888

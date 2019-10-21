@@ -1,0 +1,2 @@
+2019-10-21 11:17:11.755  WARN 2700 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.cdivtc]' package. Please check your configuration.
+2019-10-21 11:21:13.656  WARN 7592 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.cdivtc]' package. Please check your configuration.

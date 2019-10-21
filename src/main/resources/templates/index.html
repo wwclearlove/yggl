@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>登录-华信智原教师签课时系统</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/normalize.css" >
     <link rel="stylesheet" type="text/css" href="../static/css/font/iconfont.css">
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
@@ -47,8 +47,8 @@
                             <input type="password" name="userpwd" id="userpwd" placeholder="输入6位数字的密码">
                         </div>
                         <div class="login-verify" style="margin-top: 10px">
-                            <input placeholder="请输入验证码....."  name="verifyCodeActual" type="text" style="float: left;width: 50%" >
-                            <img id="captcha_img" alt="点击更换" title="点击更换" src="/kapcha?" style="float: left" onclick="this.src='/kapcha?d='+new Date()*1"/>
+                            <input placeholder="请输入验证码....."  id="verifyCodeActual" name="verifyCodeActual" type="text" style="float: left;width: 50%" >
+                            <img id="captcha_img" alt="点击更换" title="点击更换" src="/kapcha?" style="float: left;margin-left: 20px" onclick="this.src='/kapcha?d='+new Date()*1"/>
                         </div>
                         <div class="error-tips" style="clear: both"><span class="error-message">用户名或者密码不正确</span></div>
                         <div class="login-submit">
