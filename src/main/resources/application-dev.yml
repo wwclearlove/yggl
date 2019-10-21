@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://39.106.123.27:3306/yggl?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+logging:
+  level:
+    root: warn
+    com.lrm: debug
+  file: log/yggl-dev.log
+server:
+  port: 8080
+
+

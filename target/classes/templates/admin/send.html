@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>获取验证码</title>
+    <script src="http://hovertree.com/ziyuan/jquery/jquery-1.12.1.min.js"></script>
+    <script type="text/javascript">
+        var countdown = 60;
+        function send() {
+            var obj = $("#btn");
+            settime(obj);
+
+        }
+        function settime(obj) { //发送验证码倒计时
+            if (countdown == 0) {
+                obj.attr('disabled', false);
+                obj.val("获取验证码");
+                $("#btn").css("background", "#00bc12")
+                countdown = 60;
+                return;
+            } else {
+                obj.attr('disabled', true);
+                obj.val("(" + countdown + ")S");
+                countdown--;
+                $("#btn").css("background", "#ccc")
+            }
+            setTimeout(function () {
+                        settime(obj)
+                    }
+                    , 1000)
+        }
+    </script>
+        
+    <style>
+          #btn {
+            width: 180px;
+            height: 56px;
+            line-height: 56px;
+            text-align: center;
+            background: #00BC12;
+            border-radius: 8px;
+            font-size: 22px;
+            border: 0;
+            background: #00bc12;
+            color: #fff;
+        }
+    </style>
+<body> 
+
+    <input type="button" id="btn" value="获取验证码" onclick="send()"/> 
+  
+</body>
+</html>
