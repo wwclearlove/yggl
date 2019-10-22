@@ -6,10 +6,15 @@ spring:
     password: 123456
   resources:
       static-locations: classpath:/
+
 logging:
   level:
     root: warn
     com.lrm: debug
   file: log/ttss-dev.log
 server:
-  port: 8080
+  port: 8888
+# mybatis
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

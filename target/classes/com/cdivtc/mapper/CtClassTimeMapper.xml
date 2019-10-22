@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cdivtc.mapper.CtClassTimeMapper" >
+    <insert id="addClassTime" parameterType="com.cdivtc.model.CtClassTime" flushCache="false">
+        INSERT INTO ct_class_time (ct_id,ct_time)
+        VALUE (#{ctId},#{ctTime});
+    </insert>
+    <delete id="deleteClassTime" parameterType="java.lang.String" >
+        delete from ct_class_time
+        where ct_id = #{ctId}
+    </delete>
+    <update id="updateClassTime" parameterType="com.cdivtc.model.CtClassTime" >
+        update ct_class_time
+        <set >
+            <if test="ctClassTime.ctTime != null" >
+                ct_time = #{ctClassTime.ctTime,jdbcType=VARCHAR},
+            </if>
 
+        </set>
+        WHERE   ct_id = #{ctClassTime.ctId,jdbcType=VARCHAR}
+    </update>
+    <resultMap id="pageMap" type="com.cdivtc.model.CtClassTime">
+        <id column="ct_id" property="ctId"/>
+        <result column="ct_time" property="ctTime"/>
+    </resultMap>
+    <select id="findPage" parameterType="java.util.Map" resultMap="pageMap">
+        select * from ct_class_time limit #{start} , #{row}
+    </select>
+    <select id="findAll"  resultMap="pageMap">
+        select * from ct_class_time
+    </select>
 </mapper>

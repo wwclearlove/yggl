@@ -1,5 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cdivtc.mapper.UUserMapper" >
-
+    <insert id="addTeacher" parameterType="com.cdivtc.model.UUser" flushCache="false">
+        INSERT INTO u_user (u_id,u_username,u_password,u_name,u_img,u_flag,u_course)
+        VALUE (#{uId},#{uUsername},#{uPassword},#{uName},#{uImg},#{uFlag},#{uCourse});
+    </insert>
+    <delete id="deleteTeacher" parameterType="java.lang.String" >
+        delete from u_user
+        where u_id = #{uId}
+    </delete>
+    <update id="updateTeacher" parameterType="com.cdivtc.model.UUser" >
+        update u_user
+        <set >
+            <if test="uUser.uUsername != null" >
+                u_username = #{uUser.uUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="uUser.uPassword != null" >
+                u_password = #{uUser.uPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="uUser.uName != null" >
+                u_name = #{uUser.uName,jdbcType=VARCHAR},
+            </if>
+            <if test="uUser.uImg != null" >
+                u_img = #{uUser.uImg,jdbcType=VARCHAR},
+            </if>
+            <if test="uUser.uCourse != null" >
+                u_course = #{uUser.uCourse,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE   u_id = #{uUser.uId,jdbcType=VARCHAR}
+    </update>
+    <resultMap id="map" type="com.cdivtc.model.UUser">
+        <id column="u_id" property="uId"/>
+        <result column="u_username" property="uUsername"/>
+        <result column="u_password" property="uPassword"/>
+        <result column="u_name" property="uName"/>
+        <result column="u_img" property="uImg"/>
+        <result column="u_flag" property="uFlag"/>
+        <result column="u_course" property="uCourse"/>
+    </resultMap>
+    <select id="findTeacher" resultMap="map">
+        SELECT * FROM u_user
+        where u_flag = 1
+    </select>
+    <select id="findTeacherByCourse" resultMap="map" parameterType="java.lang.String">
+        SELECT * FROM u_user
+        where u_flag = 1 AND u_course=#{course}
+    </select>
 </mapper>

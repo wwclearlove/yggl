@@ -1,5 +1,16 @@
-2019-10-21 11:40:24.034  WARN 15320 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.cdivtc]' package. Please check your configuration.
-2019-10-21 11:41:48.799  WARN 2196 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.cdivtc]' package. Please check your configuration.
-2019-10-21 11:42:57.571  WARN 1396 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.cdivtc]' package. Please check your configuration.
-2019-10-21 11:44:28.329  WARN 12724 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.cdivtc]' package. Please check your configuration.
-2019-10-21 11:45:37.246  WARN 15300 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.cdivtc]' package. Please check your configuration.
+2019-10-22 08:46:38.635  WARN 312 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'courseController': Unsatisfied dependency expressed through field 'cCourseService'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.cdivtc.service.cCourseService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2019-10-22 08:46:38.865 ERROR 312 --- [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field cCourseService in com.cdivtc.web.controller.CourseController required a bean of type 'com.cdivtc.service.cCourseService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.cdivtc.service.cCourseService' in your configuration.
+

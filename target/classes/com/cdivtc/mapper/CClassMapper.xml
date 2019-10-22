@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cdivtc.mapper.CClassMapper" >
+    <insert id="addClass" parameterType="com.cdivtc.model.CClass" flushCache="false">
+        INSERT INTO c_class (c_id,c_name)
+        VALUE (#{cId},#{cName});
+    </insert>
+    <delete id="deleteClass" parameterType="java.lang.String" >
+        delete from c_class
+        where c_id = #{cId}
+    </delete>
+    <update id="updateClass" parameterType="com.cdivtc.model.CClass" >
+        update c_class
+        <set>
+            <if test="cClass.cName != null" >
+                c_name = #{cClass.cName,jdbcType=VARCHAR},
+            </if>
 
+        </set>
+        WHERE   c_id = #{cClass.cId,jdbcType=VARCHAR}
+    </update>
+    <resultMap id="pageMap" type="com.cdivtc.model.CClass">
+        <id column="c_id" property="cId"/>
+        <result column="c_name" property="cName"/>
+    </resultMap>
+    <select id="findPageClass" parameterType="java.util.Map" resultMap="pageMap">
+        select * from c_class limit #{start} , #{row}
+    </select>
+    <select id="findAllClass"  resultMap="pageMap">
+        select * from c_class
+    </select>
 </mapper>

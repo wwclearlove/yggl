@@ -226,4 +226,17 @@ public class UUser implements Serializable {
     public void setuCourse(String uCourse) {
         this.uCourse = uCourse == null ? null : uCourse.trim();
     }
+
+    @Override
+    public String toString() {
+        return "UUser{" +
+                "uId='" + uId + '\'' +
+                ", uUsername='" + uUsername + '\'' +
+                ", uPassword='" + uPassword + '\'' +
+                ", uName='" + uName + '\'' +
+                ", uImg='" + uImg + '\'' +
+                ", uFlag=" + uFlag +
+                ", uCourse='" + uCourse + '\'' +
+                '}';
+    }
 }
