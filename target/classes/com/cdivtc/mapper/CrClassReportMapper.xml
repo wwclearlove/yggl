@@ -1,5 +1,93 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cdivtc.mapper.CrClassReportMapper" >
+    <insert id="addCrClassReport" parameterType="com.cdivtc.model.CrClassReport" flushCache="false">
+        INSERT INTO cr_class_report (cr_id,cr_teacher,cr_date,cr_week,cr_time,cr_class,cr_class_room,cr_couse_num,cr_remaks,cr_flag,cr_duty)
+        VALUE (#{crId},#{crTeacher},#{crDate},#{crWeek},#{crTime},#{crClass},#{crClassRoom},#{crCouseNum},#{crRemarks},#{crFlag},#{crDuty});
+    </insert>
+    <update id="deleteCrClassReport" parameterType="java.lang.String" >
+        update cr_class_report
+        set cr_flag = 0
+        where cr_id = #{crId}
+    </update>
+    <update id="fuyuanCrClassReport" parameterType="java.lang.String" >
+        update cr_class_report
+        set cr_flag = 1
+        where cr_id = #{crId}
+    </update>
+    <update id="updateCrClassReport" parameterType="com.cdivtc.model.CrClassReport" >
+        update cr_class_report
+        <set>
+            <if test="crClassReport.crTeacher != null" >
+                cr_teacher = #{crClassReport.crTeacher,jdbcType=VARCHAR},
+            </if>
+            <if test="crClassReport.cr_date != null" >
+                cr_date = #{crClassReport.crDate,jdbcType=VARCHAR},
+            </if>
+            <if test="crClassReport.crTeacher != null" >
+                cr_week = #{crClassReport.crWeek,jdbcType=VARCHAR},
+            </if>
+            <if test="crClassReport.crTeacher != null" >
+                cr_time = #{crClassReport.crTime,jdbcType=VARCHAR},
+            </if>
+            <if test="crClassReport.crTeacher != null" >
+                cr_class = #{crClassReport.crClass,jdbcType=VARCHAR},
+            </if>
+            <if test="crClassReport.crTeacher != null" >
+                cr_class_room = #{crClassReport.crClassRoom,jdbcType=VARCHAR},
+            </if>
+            <if test="crClassReport.crTeacher != null" >
+                cr_couse_num = #{crClassReport.crCouseNum},
+            </if>
+            <if test="crClassReport.crTeacher != null" >
+                cr_remaks = #{crClassReport.crRemarks,jdbcType=VARCHAR},
+            </if>
+            <if test="crClassReport.crTeacher != null" >
+                cr_flag = #{crClassReport.crFlag},
+            </if>
+            <if test="crClassReport.crTeacher != null" >
+                cr_duty = #{crClassReport.crDuty},
+            </if>
+        </set>
+        WHERE   cr_id = #{crClassReport.crId,jdbcType=VARCHAR}
+    </update>
+    <resultMap id="pageMap" type="com.cdivtc.model.CrClassReport">
+        <id column="cr_id" property="crId"/>
+        <result column="cr_teacher" property="crTeacher"/>
+        <result column="cr_date" property="crDate"/>
+        <result column="cr_week" property="crWeek"/>
+        <result column="cr_time" property="crTime"/>
+        <result column="cr_class" property="crClass"/>
+        <result column="cr_class_room" property="crClassRoom"/>
+        <result column="cr_couse_num" property="crCouseNum"/>
+        <result column="cr_remaks" property="crRemarks"/>
+        <result column="cr_flag" property="crFlag"/>
+        <result column="cr_duty" property="crDuty"/>
+    </resultMap>
+    <select id="findAllCrClassReport"  resultMap="pageMap">
+        select * from cr_class_report
+    </select>
+    <select id="findAllCrClassReportByTeacherw" parameterType="java.util.Map" resultMap="pageMap">
+        select * from cr_class_report WHERE cr_teacher = #{teacher} AND cr_flag=1 limit #{start} , #{row}
+    </select>
+    <select id="findAllCrClassReportByTeachery" parameterType="java.util.Map" resultMap="pageMap">
+        select * from cr_class_report WHERE cr_teacher = #{teacher} AND cr_flag=2 limit #{start} , #{row}
+    </select>
+    <select id="findAllCrClassReportByTeachers" parameterType="java.util.Map" resultMap="pageMap">
+        select * from cr_class_report WHERE cr_teacher = #{teacher} AND cr_flag=0 limit #{start} , #{row}
+    </select>
 
+
+    <resultMap id="countMap" type="com.cdivtc.model.TeacherSum">
+        <result column="t_name" property="tName"/>
+        <result column="zks" property="zks"/>
+        <result column="sk" property="sk"/>
+        <result column="zb" property="zb"/>
+    </resultMap>
+    <select id="findPageCount" parameterType="java.util.Map" resultMap="countMap">
+        select cr_teacher t_name, (select sum(cr_couse_num) from cr_class_report where cr_flag != 0 and cr_teacher = t_name) zks,(select sum(cr_couse_num) from cr_class_report where cr_flag != 0 and cr_duty = 1 and cr_teacher = t_name) sk,(select sum(cr_couse_num) from cr_class_report where cr_flag != 0 and cr_duty = 0 and cr_teacher = t_name) zb from cr_class_report group by cr_teacher limit #{start} , #{row}
+    </select>
+    <select id="findPageCountAll"  resultMap="countMap">
+        select cr_teacher t_name, (select sum(cr_couse_num) from cr_class_report where cr_flag != 0 and cr_teacher = t_name) zks,(select sum(cr_couse_num) from cr_class_report where cr_flag != 0 and cr_duty = 1 and cr_teacher = t_name) sk,(select sum(cr_couse_num) from cr_class_report where cr_flag != 0 and cr_duty = 0 and cr_teacher = t_name) zb from cr_class_report group by cr_teacher
+    </select>
 </mapper>

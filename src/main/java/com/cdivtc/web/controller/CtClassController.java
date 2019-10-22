@@ -3,13 +3,12 @@ package com.cdivtc.web.controller;
 import com.cdivtc.model.*;
 import com.cdivtc.service.CtClassTimeService;
 import com.cdivtc.util.IdWorker;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController()
@@ -20,7 +19,7 @@ public class CtClassController {
     @Autowired
     CtClassTimeService ctClassTimeService;
     @RequestMapping(value ="/add",method = RequestMethod.POST)
-    public Result addCtClass(CtClassTime ctClassTime){
+    public Result addCtClass(@RequestBody CtClassTime ctClassTime){
 
         ctClassTime.setCtId(idWorker.nextId()+"");
         int i = ctClassTimeService.addClassTime(ctClassTime);
@@ -31,7 +30,8 @@ public class CtClassController {
         }
     }
     @RequestMapping(value ="/delete",method = RequestMethod.DELETE)
-    public Result deleteCtClass(String ctId){
+    public Result deleteCtClass(@RequestBody Map<String,Object> map){
+        String  ctId= (String) map.get("ctId");
         int i = ctClassTimeService.deleteClassTime(ctId);
         if(i==1){
             return Result.SUCCESS();
@@ -40,7 +40,7 @@ public class CtClassController {
         }
     }
     @RequestMapping(value ="/update",method = RequestMethod.PUT)
-    public Result updateCtClass(CtClassTime ctClassTime){
+    public Result updateCtClass(@RequestBody CtClassTime ctClassTime){
         int i = ctClassTimeService.updateClassTime(ctClassTime);
         if(i==1){
             return Result.SUCCESS();
@@ -61,7 +61,17 @@ public class CtClassController {
 
     }
     @RequestMapping(value ="/findPage",method = RequestMethod.GET)
-    public Result findPage(Integer page,Integer row){
+    public Result findPage(@Param("page") Integer page, @Param("row")Integer row){
+
+//       Integer cupage=page;
+//       Integer curow=row;
+        System.out.println(page+"多少");
+        System.out.println(row+"多少");
+        if(page<=0){
+            page=1;
+            row=5;
+        }
+
         Result result=null;
         if(page==null){
             page=1;

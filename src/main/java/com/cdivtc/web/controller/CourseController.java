@@ -5,12 +5,10 @@ import com.cdivtc.service.cClassService;
 import com.cdivtc.service.cCourseService;
 import com.cdivtc.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController()
@@ -21,7 +19,7 @@ public class CourseController {
     @Autowired
     cCourseService cCourseService;
     @RequestMapping(value ="/add",method = RequestMethod.POST)
-    public Result addCourse(CCourse cCourse){
+    public Result addCourse(@RequestBody CCourse cCourse){
         cCourse.setcId(idWorker.nextId()+"");
         int i = cCourseService.addCourse(cCourse);
         if(i==1){
@@ -31,7 +29,8 @@ public class CourseController {
         }
     }
     @RequestMapping(value ="/delete",method = RequestMethod.DELETE)
-    public Result deleteCourse(String cId){
+    public Result deleteCourse(@RequestBody Map<String,Object> map){
+        String  cId= (String) map.get("cId");
         int i = cCourseService.deleteCourse(cId);
         if(i==1){
             return Result.SUCCESS();
@@ -40,7 +39,7 @@ public class CourseController {
         }
     }
     @RequestMapping(value ="/update",method = RequestMethod.PUT)
-    public Result updateCtClass(CCourse cCourse){
+    public Result updateCtClass(@RequestBody CCourse cCourse){
         int i = cCourseService.updateCourse(cCourse);
         if(i==1){
             return Result.SUCCESS();

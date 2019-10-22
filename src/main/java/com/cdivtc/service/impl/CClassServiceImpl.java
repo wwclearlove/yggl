@@ -33,10 +33,12 @@ public class CClassServiceImpl implements cClassService {
 
     @Override
     public PageBean<CClass> findPage(Integer page, Integer row) {
+
         if(page<=0){
             page=1;
             row=5;
         }
+
         PageBean<CClass> pb=new PageBean<CClass>();
         pb.setRows(row);
         //调用查询总记录数

@@ -3,13 +3,12 @@ package com.cdivtc.web.controller;
 import com.cdivtc.model.*;
 import com.cdivtc.service.cClassService;
 import com.cdivtc.util.IdWorker;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController()
@@ -20,7 +19,8 @@ public class ClassController {
     @Autowired
     cClassService cClassService;
     @RequestMapping(value ="/add",method = RequestMethod.POST)
-    public Result addCtClass(CClass cClass){
+    public Result addCtClass(@RequestBody CClass cClass){
+        System.out.println(cClass);
         cClass.setcId(idWorker.nextId()+"");
         int i = cClassService.addClass(cClass);
         if(i==1){
@@ -29,8 +29,11 @@ public class ClassController {
             return  Result.FAIL();
         }
     }
+
     @RequestMapping(value ="/delete",method = RequestMethod.DELETE)
-    public Result deleteCtClass(String cId){
+    public Result deleteCtClass(@RequestBody Map<String,Object> map){
+      String  cId= (String) map.get("cId");
+        System.out.println(cId+"cid");
         int i = cClassService.deleteClass(cId);
         if(i==1){
             return Result.SUCCESS();
@@ -39,7 +42,8 @@ public class ClassController {
         }
     }
     @RequestMapping(value ="/update",method = RequestMethod.PUT)
-    public Result updateCtClass(CClass cClass){
+    public Result updateCtClass(@RequestBody CClass cClass){
+        System.out.println(cClass);
         int i = cClassService.updateClass(cClass);
         if(i==1){
             return Result.SUCCESS();
@@ -62,12 +66,17 @@ public class ClassController {
     @RequestMapping(value ="/findPage",method = RequestMethod.GET)
     public Result findPage(Integer page,Integer row){
         Result result=null;
+        System.out.println(page+"空");
+        System.out.println(row+"空");
         if(page==null){
             page=1;
         }
         if(row==null){
             row=5;
         }
+        System.out.println(page);
+        System.out.println(row);
+
         PageBean<CClass> pageBean= cClassService.findPage(page, row);
         if(pageBean!=null){
             result=new Result(ResultCode.SUCCESS,pageBean);
