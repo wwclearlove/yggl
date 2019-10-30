@@ -20,6 +20,21 @@ public class CourseController {
     cCourseService cCourseService;
     @RequestMapping(value ="/add",method = RequestMethod.POST)
     public Result addCourse(@RequestBody CCourse cCourse){
+        Result result=new Result();
+        System.out.println(cCourse);
+        if(cCourse.getcName().equals("")||cCourse.getcName().isEmpty()){
+            result.setMessage("添加的课程不能为空");
+            result.setSuccess(false);
+            return result;
+        }
+
+
+        CCourse byname = cCourseService.findByname(cCourse.getcName());
+        if(byname!=null){
+            result.setMessage("添加的课程名称不能相同");
+            result.setSuccess(false);
+            return result;
+        }
         cCourse.setcId(idWorker.nextId()+"");
         int i = cCourseService.addCourse(cCourse);
         if(i==1){

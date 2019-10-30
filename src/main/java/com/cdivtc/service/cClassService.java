@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface cClassService {
     public int addClass(CClass cClass);
+    public CClass findByname(String cName);
     public int deleteClass(String cId);
     public int updateClass(CClass cClass);
     public PageBean<CClass> findPage(Integer page, Integer row);

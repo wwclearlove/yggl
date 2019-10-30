@@ -24,9 +24,13 @@
         <result column="ct_time" property="ctTime"/>
     </resultMap>
     <select id="findPage" parameterType="java.util.Map" resultMap="pageMap">
-        select * from ct_class_time limit #{start} , #{row}
+        select * from ct_class_time ORDER BY ct_time limit #{start} , #{row}
     </select>
     <select id="findAll"  resultMap="pageMap">
         select * from ct_class_time
+    </select>
+    <select id="findCtClassTimeByname"  parameterType="java.lang.String" resultType="com.cdivtc.model.CtClassTime">
+        SELECT * FROM ct_class_time
+        where ct_time = #{ctTime}
     </select>
 </mapper>

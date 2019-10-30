@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface cCourseService {
     public int addCourse(CCourse cCourse);
+    public CCourse findByname(String cName);
     public int deleteCourse(String cId);
     public int updateCourse(CCourse cCourse);
     public PageBean<CCourse> findPageCourse(Integer page, Integer row);

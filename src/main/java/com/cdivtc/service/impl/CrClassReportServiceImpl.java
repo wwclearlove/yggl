@@ -1,14 +1,15 @@
 package com.cdivtc.service.impl;
 
 import com.cdivtc.mapper.CrClassReportMapper;
-import com.cdivtc.model.CClass;
-import com.cdivtc.model.CrClassReport;
-import com.cdivtc.model.PageBean;
-import com.cdivtc.model.TeacherSum;
+import com.cdivtc.model.*;
+import com.cdivtc.service.ClClassRoomService;
 import com.cdivtc.service.CrClassReportService;
+import com.cdivtc.service.CtClassTimeService;
+import com.cdivtc.service.cClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,12 @@ import java.util.Map;
 public class CrClassReportServiceImpl implements CrClassReportService {
     @Autowired
     CrClassReportMapper crClassReportMapper;
+    @Autowired
+    CtClassTimeService timeService;
+    @Autowired
+    cClassService cClassService;
+    @Autowired
+    ClClassRoomService clClassRoomService;
 
     @Override
     public int addCrClassReport(CrClassReport crClassReport) {
@@ -33,13 +40,38 @@ public class CrClassReportServiceImpl implements CrClassReportService {
     }
 
     @Override
+    public int sheheCrClassReport(List<String> crIds) {
+        int i=0;
+        if(crIds!=null){
+            for (String crid :
+                    crIds) {
+                System.out.println(crid);
+                 i = crClassReportMapper.shengheCrClassReport(crid);
+            }
+
+        }
+        return i;
+    }
+
+    @Override
     public int updateCrClassReport(CrClassReport crClassReport) {
         return crClassReportMapper.updateCrClassReport(crClassReport);
     }
 
     @Override
-    public List<CrClassReport> findAllCrClassReport() {
-        return crClassReportMapper.findAllCrClassReport();
+    public Map<String, List> findHebing() {
+        Map<String, List> map=new HashMap<>();
+        List<CClass> banji=new ArrayList<>();
+        List<CtClassTime> shijian=new ArrayList<>();
+        List<ClClassRoom> jiaos=new ArrayList<>();
+        shijian=timeService.findAll();
+        banji=cClassService.findAllClass();
+        jiaos=clClassRoomService.findAllClassRoom();
+        map.put("time",shijian);
+        map.put("class",banji);
+        map.put("room",jiaos);
+
+        return map;
     }
 
 
@@ -52,7 +84,10 @@ public class CrClassReportServiceImpl implements CrClassReportService {
         PageBean<CrClassReport> pb = new PageBean<CrClassReport>();
         pb.setRows(row);
         //调用查询总记录数
-        int totalCout = crClassReportMapper.findAllCrClassReport().size();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        map1.put("flag", 1);
+        map1.put("teacher", teacher);
+        int totalCout = crClassReportMapper.findAllCrClassReport(map1).size();
         if (totalCout == 0) {
             return null;
         } else {
@@ -72,6 +107,7 @@ public class CrClassReportServiceImpl implements CrClassReportService {
             map.put("start", start);
             map.put("row", row);
             map.put("teacher", teacher);
+            System.out.println("行数"+row+"页数"+totalPage);
             List<CrClassReport> list = crClassReportMapper.findAllCrClassReportByTeacherw(map);
             pb.setList(list);
         }
@@ -88,7 +124,10 @@ public class CrClassReportServiceImpl implements CrClassReportService {
         PageBean<CrClassReport> pb = new PageBean<CrClassReport>();
         pb.setRows(row);
         //调用查询总记录数
-        int totalCout = crClassReportMapper.findAllCrClassReport().size();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        map1.put("flag", 2);
+        map1.put("teacher", teacher);
+        int totalCout = crClassReportMapper.findAllCrClassReport(map1).size();
         if (totalCout == 0) {
             return null;
         } else {
@@ -123,7 +162,10 @@ public class CrClassReportServiceImpl implements CrClassReportService {
         PageBean<CrClassReport> pb = new PageBean<CrClassReport>();
         pb.setRows(row);
         //调用查询总记录数
-        int totalCout = crClassReportMapper.findAllCrClassReport().size();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        map1.put("flag", 0);
+        map1.put("teacher", teacher);
+        int totalCout = crClassReportMapper.findAllCrClassReport(map1).size();
         if (totalCout == 0) {
             return null;
         } else {

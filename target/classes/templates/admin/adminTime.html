@@ -3,16 +3,18 @@
 <head>
 <meta charset="utf-8">
 <title>时间管理-华信智原教师签课时系统</title>
-    <link rel="stylesheet" type="text/css" href="../../static/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/font/iconfont.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/base.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
-    <link rel="stylesheet" type="text/css" href="../../static/js/kalendae/kalendae.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/newkalendae.css">
-    <script type="text/javascript" src="../../static/js/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="../../static/js/kalendae/kalendae.standalone.js"></script>
-    <script type="text/javascript" src="../../static/js/keshi.js"></script>
-<!--包括IE9以及IE9以下的--> 
+    <link rel="stylesheet" type="text/css" href=".././css/normalize.css">
+    <link rel="stylesheet" type="text/css" href=".././css/font/iconfont.css">
+    <link rel="stylesheet" type="text/css" href=".././css/base.css">
+    <link rel="stylesheet" type="text/css" href=".././css/style.css">
+    <link rel="stylesheet" type="text/css" href=".././js/kalendae/kalendae.css">
+    <link rel="stylesheet" type="text/css" href=".././css/newkalendae.css">
+    <script type="text/javascript" src=".././js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src=".././js/kalendae/kalendae.standalone.js"></script>
+    <script type="text/javascript" src=".././js/keshi.js"></script>
+    <script type="text/javascript" src=".././js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="./../js/host.js"></script>
+<!--包括IE9以及IE9以下的-->
 <!--[if lte IE 9]>
   <style>
   	.select-wrap:after{
@@ -49,8 +51,8 @@
             <div class="adminschool-wrap">
             	<div class="add">
                 	<form name="add" action="" method="post">
-                    	<input type="text" placeholder="添加时间，比如08:45">
-                        <input type="submit" class="btn-add" value="添加新时间">
+                    	<input type="text" placeholder="添加时间，比如08:45" id="addTimeValue">
+                        <input type="submit" class="btn-add" value="添加新时间" id="addTimeButton">
                     </form>
                 </div>
                 <form name="adminClass" action="" method="post">
@@ -60,13 +62,13 @@
     <th scope="col">时间</th>
     <th scope="col">操作</th>
   </tr>
- 
-  
+
+
 </table>
 
                 </form>
             </div>
-            <div class="pagebar center">
+            <div class="pagebar center" id="pagebar">
                 <a href="javascript:;" class="current">1</a>
                 <a href="javascript:;">2</a>
                 <a href="javascript:;">3</a>
@@ -74,23 +76,23 @@
            <!--修改教室-->
            <div class="changeAllWrap hide">
                <div class="changeWrap">
-                
+
                     <form name="changeClass" action="" method="post">
-                        <input type="text">
+                        <input type="text" id="modifyValue">
                         <input type="submit" value="确定修改" class="btn-submit" id="btn-submitClass">
-                    
+
                     </form>
                     <i class="iconfont icon-close"></i>
                </div>
            </div>
-            
+
         </div>
         <aside class="fr">
         	<div id="slidebar" class="fr">
                 <div id="teacher-info">
                     <div id="touxiang">
-                        <a href="#"><img src="images/touxiang.jpg" alt="管理员头像"></a></div>
-                    <h1 class="center">汪帆</h1>
+                        <a href="#"><img src="images/touxiang.jpg" alt="管理员头像" id="userImg"></a></div>
+                    <h1 class="center" id="username">汪帆</h1>
                 </div>
                 <nav id="teacher-menu">
                     <div id="menulist">
@@ -119,49 +121,206 @@
     </div>
 </footer>
 <script>
+var page = 1;
+var row = 10;
+var modifyId = null;
+var modifyValue = null;
+var list = null;
+
+var dataCourse=[{
+    'id':10,
+    'name':'08:45',
+},
+    {
+        'id':9,
+        'name':'10:00',
+    },
+    {
+        'id':8,
+        'name':'10:20',
+    },
+    {
+        'id':7,
+        'name':'11:00',
+    },
+    {
+        'id':6,
+        'name':'11:10',
+    },
+    {
+        'id':5,
+        'name':'12:00',
+    }]
+var user = null;
 $(function(){
-	var dataCourse=[{
-		'id':10,
-		'name':'08:45',
-		},
-		{
-		'id':9,
-		'name':'10:00',	
-			},
-		{
-		'id':8,
-		'name':'10:20',	
-		},
-		{
-		'id':7,
-		'name':'11:00',
-			},
-		{
-		'id':6,
-		'name':'11:10',
-			},
-		{
-		'id':5,
-		'name':'12:00',	
-			}]
-	  var $table=$('table');
-	  for(var i=0;i<dataCourse.length;i++){
-	  $table.append( $('<tr><td>'+dataCourse[i].id+'</td><td>'+dataCourse[i].name+'</td><td><a href="javascript:;" class="change">修改</a> <a href="javascript:;" class="del">删除</a></td></tr>'));	
-	  }
-		
-	//删除教室
-	$('.del').click(function(){
-		if(confirm('确定删除该时间吗？')){
-			$(this).parents('tr').remove();
-			}
-		})
-		
-	//修改教室
-	$('.change').click(function(){
-		var $content=$(this).parent().prev().text();
-		changePanel($content);
-		})
-	})
+    if ($.cookie("user")==null || $.cookie("user") == undefined){
+        alert("请先登录");
+        window.location.href = ".././index.html";
+        return;
+    }else{
+        user = JSON.parse($.cookie("user"));
+        if (user.uFlag == 1){
+            alert("权限不足");
+            window.location.href = ".././teacher_fz.html";
+            return;
+        }
+        console.log(user)
+        $("#username").text(user.uUsername);
+        $("#userImg").attr("src", host+user.uImg);
+    }
+    init();
+})
+
+function init(){
+    var $table=$('table');
+    $("#pagebar").empty();
+    $table.empty();
+    $table.append($("  <tr>\n" +
+        "    <th scope=\"col\">ID</th>\n" +
+        "    <th scope=\"col\">时间</th>\n" +
+        "    <th scope=\"col\">操作</th>\n" +
+        "  </tr>"));
+    $.ajax({
+        type : "GET",
+        url : host+"/time/findPage?page="+page+"&row="+row,
+        xhrFields : {
+            withCredentials : true
+        },
+        crossDomain : true,
+        success : function(result) {
+            console.log(result);
+            for (var i=0;i<result.data.totalPage;i++){
+                if ((i+1)==result.data.currentPage){
+                    $("#pagebar").append($("<a href=\"javascript:;\" class='current'>"+(i+1)+"</a>"));
+                } else{
+                    $("#pagebar").append($("<a href=\"javascript:;\">"+(i+1)+"</a>"));
+                }
+            }
+            for(var i=0;i<result.data.list.length;i++){
+                $table.append( $('<tr><td>'+result.data.list[i].ctId+'</td><td>'+result.data.list[i].ctTime+'</td><td><a href="javascript:;" class="change">修改</a> <a href="javascript:;" class="del">删除</a></td></tr>'));
+            }
+        },
+        error : function(e){
+            alert("请求失败");
+        }
+    });
+}
+
+//删除时间
+$('table').on("click", ".del",function(){
+    if(confirm('确定删除该时间吗？')){
+        var id = $(this).parents('tr').children()[0].innerText;
+        list = {"ctId": id};
+        //
+        $.ajax({
+            //请求方式
+            type : "DELETE",
+            //请求的媒体类型
+            contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : host+"/time/delete",
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            //数据，json字符串
+            data : JSON.stringify(list),
+            //请求成功
+            success : function(result) {
+                console.log(result);
+                init();
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+    }
+})
+
+//弹出修改框
+$('table').on("click", ".change", function(){
+    modifyId = $(this).parents('tr').children()[0].innerText;
+    changePanel($(this).parents('tr').children()[1].innerText);
+})
+
+//修改时间
+$("#btn-submitClass").click(function(){
+    modifyValue = $("#modifyValue").val();
+
+    list = {"ctId": modifyId, "ctTime": modifyValue};
+    console.log(list);
+    $.ajax({
+        //请求方式
+        type : "PUT",
+        //请求的媒体类型
+        contentType: "application/json;charset=UTF-8",
+        //请求地址
+        url : host+"/time/update",
+        xhrFields : {
+            withCredentials : true
+        },
+        crossDomain : true,
+        //数据，json字符串
+        data : JSON.stringify(list),
+        //请求成功
+        success : function(result) {
+            console.log(result);
+            init();
+            $('.changeAllWrap').addClass('hide');
+        },
+        //请求失败，包含具体的错误信息
+        error : function(e){
+            console.log(e.status);
+            console.log(e.responseText);
+        }
+    });
+
+    return false;
+})
+
+//添加时间
+$("#addTimeButton").click(function(){
+    var ctTime = $("#addTimeValue").val();
+    list = {"ctTime": ctTime};
+    $.ajax({
+        //请求方式
+        type : "POST",
+        //请求的媒体类型
+        contentType: "application/json;charset=UTF-8",
+        //请求地址
+        url : host+"/time/add",
+        xhrFields : {
+            withCredentials : true
+        },
+        crossDomain : true,
+        //数据，json字符串
+        data : JSON.stringify(list),
+        //请求成功
+        success : function(result) {
+            console.log(result);
+            if (result.success){
+                init();
+            }else{
+                alert(result.message)
+            }
+        },
+        //请求失败，包含具体的错误信息
+        error : function(e){
+            console.log(e.status);
+            console.log(e.responseText);
+        }
+    });
+    return false;
+})
+
+
+//分页查询
+$("#pagebar").on("click", "a", function(){
+    page = $(this).text();
+    init();
+})
 </script>
 </body>
 </html>

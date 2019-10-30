@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8">
 <title>课时报表查看-华信智原教师签课时系统</title>
-    <link rel="stylesheet" type="text/css" href="../../static/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/font/iconfont.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/base.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
-    <link rel="stylesheet" type="text/css" href="../../static/js/kalendae/kalendae.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/newkalendae.css">
-    <script type="text/javascript" src="../../static/js/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="../../static/js/kalendae/kalendae.standalone.js"></script>
-    <script type="text/javascript" src="../../static/js/keshi.js"></script>
-
-<!--包括IE9以及IE9以下的--> 
+    <link rel="stylesheet" type="text/css" href=".././css/normalize.css">
+    <link rel="stylesheet" type="text/css" href=".././css/font/iconfont.css">
+    <link rel="stylesheet" type="text/css" href=".././css/base.css">
+    <link rel="stylesheet" type="text/css" href=".././css/style.css">
+    <link rel="stylesheet" type="text/css" href=".././js/kalendae/kalendae.css">
+    <link rel="stylesheet" type="text/css" href=".././css/newkalendae.css">
+    <script type="text/javascript" src=".././js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src=".././js/kalendae/kalendae.standalone.js"></script>
+    <script type="text/javascript" src=".././js/keshi.js"></script>
+    <script type="text/javascript" src=".././js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="./../js/host.js"></script>
+<!--包括IE9以及IE9以下的-->
 <!--[if lte IE 9]>
   <style>
   	.select-wrap:after{
@@ -42,9 +43,9 @@
         	<div id="recordTitle">
             	<nav>
                 	<ul class="clearfix">
-                    	<li class="active">待审核</li>
-                        <li>已通过</li>
-                        <li>已删除</li>
+                    	<li class="active" id="init-1">待审核</li>
+                        <li id="init-2">已通过</li>
+                        <li id="init-0">已删除</li>
                     </ul>
                 </nav>
             </div>
@@ -52,22 +53,22 @@
             	<!--待审核课时-->
             	<div class="check-wrap record-wrap">
                     <div class="recordSelect clearfix">
-                    	<div class="fl"><h1><span>教师：</span>赵岚稹</h1></div>
+                    	<div class="fl"><h1 id="teacherName"><span>教师：</span>赵岚稹</h1></div>
                         <div class="recordSelect-form fr">
-                            <form name="selectPage" method="post" action="">	
+                            <form name="selectPage" method="post" action="">
                                 <ul class="clearfix">
                                     <li><div class="select-wrap">
-                                        <select name="selectPage-count">	
-                                           <option value="10">每页显示10条</option>  
-                                           <option value="20">每页显示20条</option>  
-                                           <option value="30">每页显示30条</option>  
+                                        <select name="selectPage-count">
+                                           <option value="10">每页显示10条</option>
+                                           <option value="20">每页显示20条</option>
+                                           <option value="30">每页显示30条</option>
                                         </select>
                                     </div></li>
                                     <li><div class="select-wrap">
                                         <select name="selectMonth">
                                         <script>
-                                        for(var i=1;i<=12;i++){	
-                                          document.write(' <option value="'+(i<10?'0'+i:i)+'">'+(i<10?'0'+i:i)+'</option>') 
+                                        for(var i=1;i<=12;i++){
+                                          document.write(' <option value="'+(i<10?'0'+i:i)+'">'+(i<10?'0'+i:i)+'</option>')
                                         }
                                            </script>
                                         </select>
@@ -77,8 +78,8 @@
                                         <script>
                                         var myDate=new Date();
                                         var year=myDate.getFullYear();
-                                        for(var i=year;i>=2015;i--){	
-                                          document.write(' <option value="'+i+'">'+i+'</option>') 
+                                        for(var i=year;i>=2015;i--){
+                                          document.write(' <option value="'+i+'">'+i+'</option>')
                                         }
                                            </script>
                                         </select>
@@ -92,7 +93,7 @@
                     </div>
                     <div class="recordList-table checkList">
                     	<form name='shenhekeshi' action="" method="post">
-                            <table width="840" border="0" cellspacing="0" cellpadding="0" class="admin-recordList">
+                            <table width="840" border="0" cellspacing="0" cellpadding="0" class="admin-recordList" id="table-1">
                                     <tr>
                                       <th scope="col">日期</th>
                                       <th scope="col">星期</th>
@@ -100,6 +101,7 @@
                                       <th scope="col">班级</th>
                                       <th scope="col">地点</th>
                                       <th scope="col">节数</th>
+                                      <th scope="col">值班</th>
                                       <th scope="col">备注</th>
                                       <th scope="col">操作</th>
                                       <th scope="col">通过</th>
@@ -217,14 +219,14 @@
                                 </table>
                         	<div class="fr checkAll-box">
                             	<input type="checkbox" id="checkAll"> <label for="checkAll">全选</label>
-                                <input type="submit" class="btn-submit">
+                                <input type="submit" class="btn-submit" id="submit">
                             </div>
-                            <div class="pagebar center">
+                            <div class="pagebar center" id="pagebar-1">
                                 <a href="#"class="current">1</a>
                                 <a href="#">2</a>
                                 <a href="#">3</a>
                             </div>
-                            
+
                        </form>
                     </div>
                 </div>
@@ -233,20 +235,20 @@
                     <div class="recordSelect clearfix">
                     	<div class="fl"><h1><span>教师：</span>赵岚稹</h1></div>
                         <div class="recordSelect-form fr">
-                            <form name="selectPage" method="post" action="">	
+                            <form name="selectPage" method="post" action="">
                                 <ul class="clearfix">
                                     <li><div class="select-wrap">
-                                        <select name="selectPage-count">	
-                                           <option value="10">每页显示10条</option>  
-                                           <option value="20">每页显示20条</option>  
-                                           <option value="30">每页显示30条</option>  
+                                        <select name="selectPage-count">
+                                           <option value="10">每页显示10条</option>
+                                           <option value="20">每页显示20条</option>
+                                           <option value="30">每页显示30条</option>
                                         </select>
                                     </div></li>
                                     <li><div class="select-wrap">
                                         <select name="selectMonth">
                                         <script>
-                                        for(var i=1;i<=12;i++){	
-                                          document.write(' <option value="'+(i<10?'0'+i:i)+'">'+(i<10?'0'+i:i)+'</option>') 
+                                        for(var i=1;i<=12;i++){
+                                          document.write(' <option value="'+(i<10?'0'+i:i)+'">'+(i<10?'0'+i:i)+'</option>')
                                         }
                                            </script>
                                         </select>
@@ -256,8 +258,8 @@
                                         <script>
                                         var myDate=new Date();
                                         var year=myDate.getFullYear();
-                                        for(var i=year;i>=2015;i--){	
-                                          document.write(' <option value="'+i+'">'+i+'</option>') 
+                                        for(var i=year;i>=2015;i--){
+                                          document.write(' <option value="'+i+'">'+i+'</option>')
                                         }
                                            </script>
                                         </select>
@@ -270,7 +272,7 @@
                         </div>
                     </div>
                     <div class="recordList-table checkList">
-                        <table width="840" border="0" cellspacing="0" cellpadding="0">
+                        <table width="840" border="0" cellspacing="0" cellpadding="0" id="table-2">
                                 <tr>
                                   <th scope="col">日期</th>
                                   <th scope="col">星期</th>
@@ -278,6 +280,7 @@
                                   <th scope="col">班级</th>
                                   <th scope="col">地点</th>
                                   <th scope="col">节数</th>
+                                    <th scope="col">值班</th>
                                   <th scope="col">备注</th>
                                   <th scope="col">操作</th>
                               </tr>
@@ -382,7 +385,7 @@
                                   <td><a href="#" class="change">修改</a> <a href="#" class="del">删除</a></td>
                               </tr>
                             </table>
-                        <div class="pagebar center">
+                        <div class="pagebar center" id="pagebar-2">
                             <a href="#"class="current">1</a>
                             <a href="#">2</a>
                             <a href="#">3</a>
@@ -394,20 +397,20 @@
                     <div class="recordSelect clearfix">
                     	<div class="fl"><h1><span>教师：</span>赵岚稹</h1></div>
                         <div class="recordSelect-form fr">
-                            <form name="selectPage" method="post" action="">	
+                            <form name="selectPage" method="post" action="">
                                 <ul class="clearfix">
                                     <li><div class="select-wrap">
-                                        <select name="selectPage-count">	
-                                           <option value="10">每页显示10条</option>  
-                                           <option value="20">每页显示20条</option>  
-                                           <option value="30">每页显示30条</option>  
+                                        <select name="selectPage-count">
+                                           <option value="10">每页显示10条</option>
+                                           <option value="20">每页显示20条</option>
+                                           <option value="30">每页显示30条</option>
                                         </select>
                                     </div></li>
                                     <li><div class="select-wrap">
                                         <select name="selectMonth">
                                         <script>
-                                        for(var i=1;i<=12;i++){	
-                                          document.write(' <option value="'+(i<10?'0'+i:i)+'">'+(i<10?'0'+i:i)+'</option>') 
+                                        for(var i=1;i<=12;i++){
+                                          document.write(' <option value="'+(i<10?'0'+i:i)+'">'+(i<10?'0'+i:i)+'</option>')
                                         }
                                            </script>
                                         </select>
@@ -417,8 +420,8 @@
                                         <script>
                                         var myDate=new Date();
                                         var year=myDate.getFullYear();
-                                        for(var i=year;i>=2015;i--){	
-                                          document.write(' <option value="'+i+'">'+i+'</option>') 
+                                        for(var i=year;i>=2015;i--){
+                                          document.write(' <option value="'+i+'">'+i+'</option>')
                                         }
                                            </script>
                                         </select>
@@ -431,7 +434,7 @@
                         </div>
                     </div>
                     <div class="recordList-table checkList">
-                        <table width="840" border="0" cellspacing="0" cellpadding="0">
+                        <table width="840" border="0" cellspacing="0" cellpadding="0" id="table-0">
                                 <tr>
                                   <th scope="col">日期</th>
                                   <th scope="col">星期</th>
@@ -439,6 +442,7 @@
                                   <th scope="col">班级</th>
                                   <th scope="col">地点</th>
                                   <th scope="col">节数</th>
+                                    <th scope="col">值班</th>
                                   <th scope="col">备注</th>
                                   <th scope="col">操作</th>
                               </tr>
@@ -463,7 +467,7 @@
                                   <td><a href="#">复原</a></td>
                               </tr>
                             </table>
-                        <div class="pagebar center">
+                        <div class="pagebar center" id="pagebar-0">
                             <a href="#"class="current">1</a>
                             <a href="#">2</a>
                             <a href="#">3</a>
@@ -472,8 +476,8 @@
                 </div>
             </div>
             <!--修改课时-->
-            <div class="change-wrap record-bg hide">
-                    <div class="keshi-form changeRecord">
+            <div class="change-wrap record-bg hide" id="change-wrap">
+                    <div class="keshi-form changeRecord" style="top:40%">
                         <form name="changekeshi" method="post" action="">
                     <table width="840" border="0" cellspacing="0" cellpadding="10">
                 <tr>
@@ -495,9 +499,9 @@
                   <div class="select-wrap">
                   <select id="select-class" name="select-class">
               	<optgroup label="我的班级">
-                	<option value="UI1801">UI1801</option>
+                	<option value="UI1801" id="myClass">UI1801</option>
                 </optgroup>
-                <optgroup label="全部班级">
+                <optgroup label="全部班级" id="allClass">
                     <option value="UI1802">UI1802</option>
                     <option value="UI1801">UI1801</option>
                     <option value="前端1802">前端1802</option>
@@ -508,10 +512,10 @@
                   <td rowspan="2">
                   <div class="select-wrap">
                   <select id="classroom" name="classroom">
-              	<optgroup label="我的教室">
+              	<optgroup label="我的教室" id="myClassRoom">
                 	<option>602</option>
                 </optgroup>
-                <optgroup label="全部教室">
+                <optgroup label="全部教室" id="allRoom">
                     <option>601</option>
                     <option>602</option>
                     <option>603</option>
@@ -527,10 +531,10 @@
                   <td rowspan="2">
                   <div class="select-wrap">
                   <select id="count" name="count">
-              	<optgroup label="我的课时数">
+              	<optgroup label="我的课时数" id="myCourseNum">
                 	<option>8</option>
                 </optgroup>
-                <optgroup label="全部课时数">
+                <optgroup label="全部课时数" id="allCourseNum">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -570,7 +574,7 @@
                 </tr>
               </table>
               <div id="submit-wrap" class="center">
-                <input type="submit" value="点击确定" class="btn-submit">
+                <input type="submit" value="点击确定" id="modify" class="btn-submit">
               </div>
                 </form>
                         </div>
@@ -583,8 +587,8 @@
      						<p>确定删除该课时吗？</p>
                             <input type="submit" id="btn-delete" name="btn-delete" value="确定">
                             <input type="button" id="btn-cancel" value="取消">
-     
-     </form>                
+
+     </form>
                     </div>
                 </div>
       	</div>
@@ -592,8 +596,8 @@
         	<div id="slidebar" class="fr">
                 <div id="teacher-info">
                     <div id="touxiang">
-                        <a href="#"><img src="images/touxiang.jpg" alt="管理员头像"></a></div>
-                    <h1 class="center">汪帆</h1>
+                        <a href="#"><img src="images/touxiang.jpg" alt="管理员头像" id="userImg"></a></div>
+                    <h1 class="center" id="username">汪帆</h1>
                 </div>
                 <nav id="teacher-menu">
                     <div id="menulist">
@@ -622,11 +626,40 @@
     </div>
 </footer>
 <script>
+    var page_1 = 1;
+    var row_1 = 10;
+    var page_2 = 1;
+    var row_2 = 10;
+    var page_0 = 1;
+    var row_0 = 10;
+    var list = null;
+    var user = null;
 //全选
 $(function(){
+    if ($.cookie("user")==null || $.cookie("user") == undefined){
+        alert("请先登录");
+        window.location.href = ".././index.html";
+        return;
+    }else{
+        user = JSON.parse($.cookie("user"));
+        if (user.uFlag == 1){
+            alert("权限不足");
+            window.location.href = ".././teacher_fz.html";
+            return;
+        }
+        console.log(user)
+        $("#teacherName").text(decodeURI(window.location.search.split("=")[1]));
+        $("#username").text(user.uUsername);
+        $("#userImg").attr("src", host+user.uImg);
+
+        init();
+        findPrevData()
+    }
+
 	var num=0;
-	var $inputs=$('.admin-recordList').find('input[type=checkbox]');
+	var $inputs=null;
 	$('#checkAll').click(function(){
+        var $inputs=$('.admin-recordList').find('input[type=checkbox]');
 		var isChecked=$(this).prop('checked');
 		if(isChecked){
 			$inputs.prop('checked',true);
@@ -637,27 +670,530 @@ $(function(){
 			num=0;
 			}
 		})
-	$inputs.click(function(){
-		if($(this).prop('checked')){
-			num++;
-			}
-		else{
-			num--;
-			}
-		//console.log(num);	
-		if(num==$inputs.length){
-			$('#checkAll').prop('checked',true);
-			}
-		else{
-			$('#checkAll').prop('checked',false);
-			}
-		
-		
-		})
-	
-	
-	
+    $("#table-1,#table-2").on("click","input[type=checkbox]",function(){
+        if($(this).prop('checked')){
+            num++;
+        }
+        else{
+            num--;
+        }
+        //console.log(num);
+        if(num==$("#table-1,#table-2").find('input[type=checkbox]').length){
+            $('#checkAll').prop('checked',true);
+        }
+        else{
+            $('#checkAll').prop('checked',false);
+        }
+    });
+
 	})
+
+    $("#init-1").click(function(){
+        init();
+    })
+    $("#init-2").click(function(){
+        init_2();
+    })
+    $("#init-0").click(function(){
+        init_0();
+    })
+
+    //待审核
+    function init(){
+        $("#pagebar-1").empty();
+        $("#table-1").empty();
+        $("#table-1").append($("                                <tr>\n" +
+            "                                  <th scope=\"col\">日期</th>\n" +
+            "                                  <th scope=\"col\">星期</th>\n" +
+            "                                  <th scope=\"col\">时间段</th>\n" +
+            "                                  <th scope=\"col\">班级</th>\n" +
+            "                                  <th scope=\"col\">地点</th>\n" +
+            "                                  <th scope=\"col\">节数</th>\n" +
+            "                                  <th scope=\"col\">值班</th>\n" +
+            "                                  <th scope=\"col\">备注</th>\n" +
+            "                                  <th scope=\"col\">操作</th>\n" +
+            "                                  <th scope=\"col\">通过</th>\n" +
+            "                              </tr>"));
+        var crTeacher = window.location.search.split("=")[1];
+        $.ajax({
+            type : "GET",
+            url : host+"/report/findPageByTeacher1?page="+page_1+"&row="+row_1+"&crTeacher="+crTeacher,
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            success : function(result) {
+                console.log(result);
+                for (var i=0;i<result.data.totalPage;i++){
+                    if ((i+1)==result.data.currentPage){
+                        $("#pagebar-1").append($("<a href=\"javascript:;\" class='current'>"+(i+1)+"</a>"));
+                    } else{
+                        $("#pagebar-1").append($("<a href=\"javascript:;\">"+(i+1)+"</a>"));
+                    }
+
+                }
+                for(var i=0;i<result.data.list.length;i++){
+                    var duty = null;
+                    if (result.data.list[i].crDuty==0){
+                        duty = "是";
+                    } else{
+                        duty = "否"
+                    }
+                    $("#table-1").append( $('<tr><td style="display: none">'+result.data.list[i].crId+'</td><td>'+result.data.list[i].crDate+'</td><td>'+result.data.list[i].crWeek+'</td><td>'+result.data.list[i].crTime+'</td><td>'+result.data.list[i].crClass+'</td><td>'+result.data.list[i].crClassRoom+'</td><td>'+result.data.list[i].crCouseNum+'</td><td>'+duty+'</td><td>'+result.data.list[i].crRemarks+'</td><td><a href="javascript:;" class="change">修改</a> <a href="javascript:;" class="del">删除</a></td><td><input type="checkbox"></td></tr>'));
+                }
+            },
+            error : function(e){
+                alert("请求失败");
+            }
+        });
+
+    }
+    //分页查询
+    $("#pagebar-1").on("click", "a", function(){
+        page_1 = $(this).text();
+        init();
+    })
+
+
+    // 已通过
+    function init_2(){
+        $("#pagebar-2").empty();
+        $("#table-2").empty();
+        $("#table-2").append($("                                <tr>\n" +
+            "                                  <th scope=\"col\">日期</th>\n" +
+            "                                  <th scope=\"col\">星期</th>\n" +
+            "                                  <th scope=\"col\">时间段</th>\n" +
+            "                                  <th scope=\"col\">班级</th>\n" +
+            "                                  <th scope=\"col\">地点</th>\n" +
+            "                                  <th scope=\"col\">节数</th>\n" +
+            "                                  <th scope=\"col\">值班</th>\n" +
+            "                                  <th scope=\"col\">备注</th>\n" +
+            "                                  <th scope=\"col\">操作</th>\n" +
+            "                              </tr>"));
+        var crTeacher = window.location.search.split("=")[1];
+        $.ajax({
+            type : "GET",
+            url : host+"/report/findPageByTeacher2?page="+page_2+"&row="+row_2+"&crTeacher="+crTeacher,
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            success : function(result) {
+                console.log(result);
+                for (var i=0;i<result.data.totalPage;i++){
+                    if ((i+1)==result.data.currentPage){
+                        $("#pagebar-2").append($("<a href=\"javascript:;\" class='current'>"+(i+1)+"</a>"));
+                    } else{
+                        $("#pagebar-2").append($("<a href=\"javascript:;\">"+(i+1)+"</a>"));
+                    }
+
+                }
+                for(var i=0;i<result.data.list.length;i++){
+                    var duty = null;
+                    if (result.data.list[i].crDuty==0){
+                        duty = "是";
+                    } else{
+                        duty = "否"
+                    }
+                    $("#table-2").append( $('<tr><td style="display: none">'+result.data.list[i].crId+'</td><td>'+result.data.list[i].crDate+'</td><td>'+result.data.list[i].crWeek+'</td><td>'+result.data.list[i].crTime+'</td><td>'+result.data.list[i].crClass+'</td><td>'+result.data.list[i].crClassRoom+'</td><td>'+result.data.list[i].crCouseNum+'</td><td>'+duty+'</td><td>'+result.data.list[i].crRemarks+'</td><td><a href="javascript:;" class="change">修改</a> <a href="javascript:;" class="del">删除</a></td></tr>'));
+                }
+            },
+            error : function(e){
+                alert("请求失败");
+            }
+        });
+    }
+
+    //分页查询
+    $("#pagebar-2").on("click", "a", function(){
+        page_2 = $(this).text();
+        init_2();
+    })
+
+
+    // 已删除
+    function init_0(){
+        $("#pagebar-0").empty();
+        $("#table-0").empty();
+        $("#table-0").append($("                                <tr>\n" +
+            "                                  <th scope=\"col\">日期</th>\n" +
+            "                                  <th scope=\"col\">星期</th>\n" +
+            "                                  <th scope=\"col\">时间段</th>\n" +
+            "                                  <th scope=\"col\">班级</th>\n" +
+            "                                  <th scope=\"col\">地点</th>\n" +
+            "                                  <th scope=\"col\">节数</th>\n" +
+            "                                  <th scope=\"col\">值班</th>\n" +
+            "                                  <th scope=\"col\">备注</th>\n" +
+            "                                  <th scope=\"col\">操作</th>\n" +
+            "                              </tr>"));
+        var crTeacher = window.location.search.split("=")[1];
+        $.ajax({
+            type : "GET",
+            url : host+"/report/findPageByTeacher0?page="+page_0+"&row="+row_0+"&crTeacher="+crTeacher,
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            success : function(result) {
+                console.log(result);
+                for (var i=0;i<result.data.totalPage;i++){
+                    if ((i+1)==result.data.currentPage){
+                        $("#pagebar-0").append($("<a href=\"javascript:;\" class='current'>"+(i+1)+"</a>"));
+                    } else{
+                        $("#pagebar-0").append($("<a href=\"javascript:;\">"+(i+1)+"</a>"));
+                    }
+
+                }
+                for(var i=0;i<result.data.list.length;i++){
+                    var duty = null;
+                    if (result.data.list[i].crDuty==0){
+                        duty = "是";
+                    } else{
+                        duty = "否"
+                    }
+                    $("#table-0").append( $('<tr><td style="display: none">'+result.data.list[i].crId+'</td><td>'+result.data.list[i].crDate+'</td><td>'+result.data.list[i].crWeek+'</td><td>'+result.data.list[i].crTime+'</td><td>'+result.data.list[i].crClass+'</td><td>'+result.data.list[i].crClassRoom+'</td><td>'+result.data.list[i].crCouseNum+'</td><td>'+duty+'</td><td>'+result.data.list[i].crRemarks+'</td><td><a href="#" class="fy">复原</a></td></tr>'));
+                }
+            },
+            error : function(e){
+                alert("请求失败");
+            }
+        });
+    }
+
+    //分页查询
+    $("#pagebar-0").on("click", "a", function(){
+        page_0 = $(this).text();
+        init_0();
+    })
+
+    var modifyTable = null;
+    var modifyCrId = null;
+    var modifyCrDate = null;
+    var modifyCrTime = null;
+    var modifyCrClass = null;
+    var modifyCrClassRoom = null;
+    var modifyCrCouseNum = null;
+    var modifyCrDuty = null;
+    var modifyCrRemarks = null;
+
+    //弹出修改框
+    $('#table-1,#table-2').on("click", ".change", function(){
+        $("#change-wrap").removeClass("hide");
+        modifyTable = $(this).parent().parent().parent().parent().attr("id");
+        modifyCrId = $(this).parents('tr').children()[0].innerText;
+        modifyCrDate = $(this).parents('tr').children()[1].innerText;
+        modifyCrTime = $(this).parents('tr').children()[3].innerText;
+        modifyCrClass = $(this).parents('tr').children()[4].innerText;
+        modifyCrClassRoom = $(this).parents('tr').children()[5].innerText;
+        modifyCrCouseNum = $(this).parents('tr').children()[6].innerText;
+        modifyCrDuty = $(this).parents('tr').children()[7].innerText;
+        modifyCrRemarks = $(this).parents('tr').children()[8].innerText;
+
+        $("#select-date").val(modifyCrDate);
+        if (modifyCrTime=="全天"){
+            $("#allday").prop("checked",true);
+        }else{
+            $("#allday").prop("checked",false);
+            $("#start-time").attr("disabled",false);
+            $("#end-time").attr("disabled",false);
+        }
+        $("#myClass").empty();
+        $("#myClass").append("<option value=\""+modifyCrClass+"\" id=\"myClass\">"+modifyCrClass+"</option>");
+
+        $("#myClassRoom").empty();
+        $("#myClassRoom").append("<option value=\""+modifyCrClassRoom+"\" id=\"myClass\">"+modifyCrClassRoom+"</option>");
+
+        $("#myCourseNum").empty();
+        $("#myCourseNum").append("<option value=\""+modifyCrCouseNum+"\" id=\"myClass\">"+modifyCrCouseNum+"</option>");
+
+        if(modifyCrDuty=="是"){
+            $("#zhiban").prop("checked",true);
+        }else{
+            $("#zhiban").prop("checked",false);
+        }
+
+        $("#beizhu").val(modifyCrRemarks);
+
+    })
+
+    $("#allday-label").click(function(){
+        if($("#allday").attr("checked")=="checked"){
+            $("#start-time").attr('disabled',false);
+            $("#end-time").attr('disabled',false);
+        }else{
+            $("#start-time").attr('disabled',true);
+            $("#end-time").attr('disabled',true);
+        }
+    });
+
+    //修改
+    $("#modify").click(function(){
+        modifyCrDate = $("#select-date").val();
+        if ($("#allday").attr("checked")=="checked"){
+            modifyCrTime = "全天"
+        }else{
+            modifyCrTime = $("#start-time").val()+" - "+$("#end-time").val();
+        }
+        modifyCrClass = $("#select-class").val();
+        modifyCrClassRoom = $("#classroom").val();
+        modifyCrCouseNum = $("#count").val();
+        if ($("#zhiban").attr("checked")=="checked") {
+            modifyCrDuty = 0;
+        }else{
+            modifyCrDuty = 1;
+        }
+        modifyCrRemarks = $("#beizhu").val();
+        list = {
+            "crId":modifyCrId,
+            "crDate":modifyCrDate,
+            "crTime":modifyCrTime,
+            "crClass":modifyCrClass,
+            "crClassRoom":modifyCrClassRoom,
+            "crCouseNum":modifyCrCouseNum,
+            "crDuty":modifyCrDuty,
+            "crRemarks":modifyCrRemarks
+        };
+        console.log(list);
+        $('.change-wrap').addClass('hide');
+        $.ajax({
+            //请求方式
+            type : "PUT",
+            //请求的媒体类型
+            contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : host+"/report/update",
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            //数据，json字符串
+            data : JSON.stringify(list),
+            //请求成功
+            success : function(result) {
+                console.log(result);
+                if (result.success){
+                    if(modifyTable == "table-1"){
+                        init();
+                    }else if(modifyTable == "table-2"){
+                        init_2();
+                    }
+
+                }else{
+                    alert(result.message)
+                }
+                $('.change-wrap').addClass('hide');
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+
+        return false;
+    })
+
+    //删除
+    $('#table-1,#table-2').on("click", ".del", function(){
+        modifyCrId = $(this).parents('tr').children()[0].innerText;
+        modifyTable = $(this).parent().parent().parent().parent().attr("id");
+        list = {"crId": modifyCrId};
+        //
+        $.ajax({
+            //请求方式
+            type : "DELETE",
+            //请求的媒体类型
+            contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : host+"/report/delete",
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            //数据，json字符串
+            data : JSON.stringify(list),
+            //请求成功
+            success : function(result) {
+                console.log(result);
+                if(modifyTable == "table-1"){
+                    init();
+                }else if(modifyTable == "table-2"){
+                    init_2();
+                }
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+    })
+
+    // 通过审核
+    $("#submit").click(function(){
+        checkBoxs = $('.admin-recordList').find('input[type=checkbox]');
+        checkBoxsTrue = [];
+        for (var i=0;i<checkBoxs.length; i++){
+            if(checkBoxs[i].checked){
+                checkBoxsTrue.push($(checkBoxs[i]).parents('tr').children()[0].innerText);
+            }
+        }
+
+        list = {"listId": checkBoxsTrue};
+
+        $.ajax({
+            //请求方式
+            type : "PUT",
+            //请求的媒体类型
+            contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : host+"/report/shenghe",
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            //数据，json字符串
+            data : JSON.stringify(list),
+            //请求成功
+            success : function(result) {
+                console.log(result);
+                init();
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+
+
+        console.log(checkBoxsTrue);
+        return false;
+    })
+
+    //复原
+    $("#table-0").on("click",".fy",function(){
+        var cId = $(this).parents('tr').children()[0].innerText;
+        $.ajax({
+            //请求方式
+            type : "GET",
+            // //请求的媒体类型
+            // contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : host+"/report/fuyuan?cId="+cId,
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            // //数据，json字符串
+            // data : JSON.stringify(list),
+            //请求成功
+            success : function(result) {
+                console.log(result);
+                init_0();
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+    })
+
+
+
+    //弹出修改框
+    $('#table-1,#table-2').on("click", ".change", function(){
+        $("#change-wrap").removeClass("hide");
+        modifyTable = $(this).parent().parent().parent().parent().attr("id");
+        modifyCrId = $(this).parents('tr').children()[0].innerText;
+        modifyCrDate = $(this).parents('tr').children()[1].innerText;
+        modifyCrTime = $(this).parents('tr').children()[3].innerText;
+        modifyCrClass = $(this).parents('tr').children()[4].innerText;
+        modifyCrClassRoom = $(this).parents('tr').children()[5].innerText;
+        modifyCrCouseNum = $(this).parents('tr').children()[6].innerText;
+        modifyCrDuty = $(this).parents('tr').children()[7].innerText;
+        modifyCrRemarks = $(this).parents('tr').children()[8].innerText;
+
+        $("#select-date").val(modifyCrDate);
+        if (modifyCrTime=="全天"){
+            $("#allday").prop("checked",true);
+        }else{
+            $("#allday").prop("checked",false);
+            $("#start-time").attr("disabled",false);
+            $("#end-time").attr("disabled",false);
+        }
+        $("#myClass").empty();
+        $("#myClass").append("<option value=\""+modifyCrClass+"\" id=\"myClass\">"+modifyCrClass+"</option>");
+
+        $("#myClassRoom").empty();
+        $("#myClassRoom").append("<option value=\""+modifyCrClassRoom+"\" id=\"myClass\">"+modifyCrClassRoom+"</option>");
+
+        $("#myCourseNum").empty();
+        $("#myCourseNum").append("<option value=\""+modifyCrCouseNum+"\" id=\"myClass\">"+modifyCrCouseNum+"</option>");
+
+        if(modifyCrDuty=="是"){
+            $("#zhiban").prop("checked",true);
+        }else{
+            $("#zhiban").prop("checked",false);
+        }
+
+        $("#beizhu").val(modifyCrRemarks);
+
+    })
+
+    $("#allday-label").click(function(){
+        if($("#allday").attr("checked")=="checked"){
+            $("#start-time").attr('disabled',false);
+            $("#end-time").attr('disabled',false);
+        }else{
+            $("#start-time").attr('disabled',true);
+            $("#end-time").attr('disabled',true);
+        }
+    });
+
+    function findPrevData(){
+        $.ajax({
+            //请求方式
+            type : "GET",
+            //请求地址
+            url : host+"/report/prevData",
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            //请求成功
+            success : function(result) {
+                console.log(result);
+                var classNames = result.data.class;
+                var roomNames = result.data.room;
+                var timeNames = result.data.time;
+                $("#allClass").empty();
+                $("#allRoom").empty();
+                $("#start-time").empty();
+                $("#end-time").empty();
+                $.each(classNames, function(index, item){
+                    $("#allClass").append($("<option value=\""+item.cName+"\">"+item.cName+"</option>"));
+                });
+                $.each(roomNames, function(index, item){
+                    $("#allRoom").append($("<option>"+item.clRoom+"</option>"));
+                });
+                $.each(timeNames, function(index, item){
+                    if (parseInt(item.ctTime.substring(0,2))<=12) {
+                        $("#start-time").append($("<option value=\""+item.ctTime+"\">"+item.ctTime+"</option>"));
+                    }else{
+                        $("#end-time").append($("<option value=\""+item.ctTime+"\">"+item.ctTime+"</option>"));
+                    }
+                });
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

@@ -22,6 +22,11 @@ public class CClassServiceImpl implements cClassService {
     }
 
     @Override
+    public CClass findByname(String cName) {
+        return cClassMapper.findClassByname(cName);
+    }
+
+    @Override
     public int deleteClass(String cId) {
         return cClassMapper.deleteClass(cId);
     }

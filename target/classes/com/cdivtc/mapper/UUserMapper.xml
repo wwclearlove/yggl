@@ -47,4 +47,20 @@
         SELECT * FROM u_user
         where u_flag = 1 AND u_course=#{course}
     </select>
+    <select id="findTeacherByName" resultMap="map" parameterType="java.lang.String">
+        SELECT * FROM u_user
+        where u_flag = 1 AND u_name LIKE #{name}
+    </select>
+    <select id="findTeacherByUser"  parameterType="java.util.Map" resultType="com.cdivtc.model.UUser">
+        SELECT * FROM u_user
+        where u_username = #{username} AND u_flag=#{flag}
+    </select>
+    <select id="findTeacherByuId"  parameterType="java.util.Map" resultType="com.cdivtc.model.UUser">
+        SELECT * FROM u_user
+        where u_id = #{uId} AND u_flag=#{flag}
+    </select>
+    <select id="findTeacherByPassword"  parameterType="java.util.Map" resultType="com.cdivtc.model.UUser">
+        SELECT * FROM u_user
+        where u_id = #{uId} AND u_password=#{uPassword}
+    </select>
 </mapper>

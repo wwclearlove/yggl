@@ -1,5 +1,6 @@
 package com.cdivtc.mapper;
 
+import com.cdivtc.model.ClClassRoom;
 import com.cdivtc.model.CtClassTime;
 import com.cdivtc.model.UUser;
 import org.apache.ibatis.annotations.Param;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 public interface CtClassTimeMapper {
     public int addClassTime(CtClassTime ctClassTime);
+    public CtClassTime findCtClassTimeByname(String ctTime);
     public int deleteClassTime(String ctId);
     public int updateClassTime(@Param("ctClassTime")CtClassTime ctClassTime);
     public List<CtClassTime> findPage(Map<String,Object> map);

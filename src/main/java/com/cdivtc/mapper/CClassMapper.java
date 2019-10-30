@@ -9,6 +9,7 @@ import java.util.Map;
 
 public interface CClassMapper {
     public int addClass(CClass cClass);
+    public CClass findClassByname(String cName);
     public int deleteClass(String cId);
     public int updateClass(@Param("cClass")CClass cClass);
     public List<CClass> findPageClass(Map<String,Object> map);

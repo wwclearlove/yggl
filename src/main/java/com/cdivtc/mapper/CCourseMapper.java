@@ -9,8 +9,10 @@ import java.util.Map;
 
 public interface CCourseMapper {
     public int addCourse(CCourse cCourse);
+    public CCourse findCourseByname(String cName);
     public int deleteCourse(String cId);
     public int updateCourse(@Param("cCourse")CCourse cCourse);
     public List<CCourse> findPageCourse(Map<String,Object> map);
     public List<CCourse> findAllCourse();
+
 }

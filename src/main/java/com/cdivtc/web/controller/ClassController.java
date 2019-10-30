@@ -20,7 +20,19 @@ public class ClassController {
     cClassService cClassService;
     @RequestMapping(value ="/add",method = RequestMethod.POST)
     public Result addCtClass(@RequestBody CClass cClass){
-        System.out.println(cClass);
+        Result result=new Result();
+        System.out.println(cClass.getcName());
+        if(cClass.getcName().equals("")||cClass.getcName().isEmpty()){
+            result.setMessage("添加的班级不能为空");
+            result.setSuccess(false);
+            return result;
+        }
+        CClass byname = cClassService.findByname(cClass.getcName());
+        if(byname!=null){
+            result.setMessage("添加的班级名称不能相同");
+            result.setSuccess(false);
+            return result;
+        }
         cClass.setcId(idWorker.nextId()+"");
         int i = cClassService.addClass(cClass);
         if(i==1){

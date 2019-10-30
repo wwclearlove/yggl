@@ -23,6 +23,11 @@ public class cCourseServiceImpl implements cCourseService {
     }
 
     @Override
+    public CCourse findByname(String cName) {
+        return cCourseMapper.findCourseByname(cName);
+    }
+
+    @Override
     public int deleteCourse(String cId) {
         return cCourseMapper.deleteCourse(cId);
     }

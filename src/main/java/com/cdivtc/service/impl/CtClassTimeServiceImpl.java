@@ -23,6 +23,11 @@ public class CtClassTimeServiceImpl implements CtClassTimeService {
     }
 
     @Override
+    public CtClassTime findByname(String cName) {
+        return ctClassTimeMapper.findCtClassTimeByname(cName);
+    }
+
+    @Override
     public int deleteClassTime(String ctId) {
         return ctClassTimeMapper.deleteClassTime(ctId);
     }

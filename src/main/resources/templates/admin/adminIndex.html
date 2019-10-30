@@ -3,16 +3,18 @@
 <head>
 <meta charset="utf-8">
 <title>教师管理-华信智原教师签课时系统</title>
-    <link rel="stylesheet" type="text/css" href="../../static/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/font/iconfont.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/base.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
-    <link rel="stylesheet" type="text/css" href="../../static/js/kalendae/kalendae.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/newkalendae.css">
-    <script type="text/javascript" src="../../static/js/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="../../static/js/kalendae/kalendae.standalone.js"></script>
-    <script type="text/javascript" src="../../static/js/keshi.js"></script>
-<!--包括IE9以及IE9以下的--> 
+    <link rel="stylesheet" type="text/css" href=".././css/normalize.css">
+    <link rel="stylesheet" type="text/css" href=".././css/font/iconfont.css">
+    <link rel="stylesheet" type="text/css" href=".././css/base.css">
+    <link rel="stylesheet" type="text/css" href=".././css/style.css">
+    <link rel="stylesheet" type="text/css" href=".././js/kalendae/kalendae.css">
+    <link rel="stylesheet" type="text/css" href=".././css/newkalendae.css">
+    <script type="text/javascript" src=".././js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src=".././js/kalendae/kalendae.standalone.js"></script>
+    <script type="text/javascript" src=".././js/keshi.js"></script>
+    <script type="text/javascript" src=".././js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="./../js/host.js"></script>
+<!--包括IE9以及IE9以下的-->
 <!--[if lte IE 9]>
   <style>
   	.select-wrap:after{
@@ -41,23 +43,48 @@
                     <span class="buttons" id="viewAll">查看全部老师</span>
                 </div>
                 <!--添加新老师-->
-                <div class="change-wrap record-bg hide">
+                <div class="change-wrap record-bg hide" id="change-wrap">
                 	<div class="addteacher-wrap  changeRecord">
                     	<h3>添加新老师</h3>
                     	<form name="addTeacher" method="post" action="">
+
+<!--                    <div class="teacher">-->
+<!--                        <input type="file" name="teacherPic" id="newTeacherPic">-->
+<!--                    </div>-->
+<!--                    <div class="error-tips"><span class="error-message hide" id="newTeacherPic-name"></span></div>-->
+                            <div style="text-align: center;margin: 20px 0">
+                                <h2>图片上传</h2>
+                                <div class="control-group">
+                                    <img id="upload_img_tmp" height="200" width="320" style="margin: 20px 0">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <input id="upload_img" class="form-control" readonly type="text">
+                                            <label class="input-group-btn">
+                                                <input id="file" type="file" name="file" style="left: -9999px; position: absolute;">
+                                                <span style="background-color:#0f800a;padding: 2px 8px;color: white">添加图片</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    <div class="teacher">
+                        <input type="tel" name="teacherName" placeholder="用户名" id="newTeacherTel" autocomplete="off">
+                    </div>
+                    <div class="error-tips"><span class="error-message hide" id="newTeacher-tel"></span></div>
+
                		<div class="teacher">
                     	<input type="text" name="teacherName" placeholder="姓名" id="newTeacher" autocomplete="off">
                     </div>
                     <div class="error-tips"><span class="error-message hide" id="newTeacher-name"></span></div>
                     <div class="teacher career">
                     	<div class="select-wrap">
-                            <select name="career">
+                            <select name="career" id="career">
                             	<option>选择该老师所授专业</option>
                                 <option value="UI设计">UI设计</option>
                                 <option value="视觉交互设计">视觉交互设计</option>
                                 <option value="Java开发">Java开发</option>
                                 <option value="大数据精准营销">大数据精准营销</option>
-                                
                             </select>
                         </div>
                     </div>
@@ -65,49 +92,50 @@
                     	<input type="password" name="teacherpwd" placeholder="输入新密码，6到12个字符或数字" id="newTeacherPwd1">
                     </div>
                     <div class="error-tips"><span class="error-message hide" id="newteacherpwd-message1">密码必须是6到12个字符或数字</span></div>
-                    
+
                     <div class="teacher">
                     	<input type="password" name="teacherpwd" placeholder="确认新密码保持一致" id="newTeacherPwd2">
                     </div>
                 	<div class="error-tips"><span class="error-message hide" id="newteacherpwd-message2">两个新密码不一致</span></div>
                     <div class="teacher">
-                    	<input type="submit" value="点击确认添加" class="btn-submit off" id="btn-teacherSubmit">
+                    	<input type="button" value="点击确认添加" class="btn-submit off" id="btn-teacherSubmit">
                     </div>
                 </form>
                 		<i class="iconfont icon-close"></i>
                     </div>
-                    
+
                 </div>
+
             	<div id="searchTeacher" class="fr">
                 	<form name="searchTeacher" method="post" action="">
                   <input type="text" placeholder="输入教师名字" id="teachername">
-                  <button type="button" id="btn-teacher"><i class="iconfont icon-search"></i></button>  
+                  <button type="button" id="btn-teacher"><i class="iconfont icon-search"></i></button>
                     </form>
                 </div>
-                
+
             </div>
             <div id="teacher-list">
             	<div class="group">
                 	<h3>UI组</h3>
                 	<ul class="clearfix">
                     	<li>
-                        	<div class="touxiang"><a href="adminRecordList_fz.html"><img src="../../static/images/touxiang/1.jpg"></a></div>
+                        	<div class="touxiang"><a href="adminRecordList_fz.html"><img src=".././images/touxiang/1.jpg"></a></div>
                         	<div class="teachername"><a href="#">赵岚稹 <span class="hide">隐藏</span></a></div>
                         </li>
                         <li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/1.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/1.jpg"></a></div>
                         	<div class="teachername"><a href="#">赵岚稹 <span class="hide">隐藏</span></a></div>
                         </li>
                         <li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/2.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/2.jpg"></a></div>
                         	<div class="teachername"><a href="#">何艳 <span class="hide">隐藏</span></a></div>
                         </li>
                         <li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/3.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/3.jpg"></a></div>
                         	<div class="teachername"><a href="#">汪帆 <span class="hide">隐藏</span></a></div>
                         </li>
                         <li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/4.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/4.jpg"></a></div>
                         	<div class="teachername"><a href="#">刘勇 <span class="hide">隐藏</span></a></div>
                         </li>
                     </ul>
@@ -116,19 +144,19 @@
                 	<h3>Java组</h3>
                 	<ul class="clearfix">
                     	<li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/1.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/1.jpg"></a></div>
                         	<div class="teachername"><a href="#">赵岚稹 <span class="hide">隐藏</span></a></div>
                         </li>
                         <li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/2.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/2.jpg"></a></div>
                         	<div class="teachername"><a href="#">何艳 <span class="hide">隐藏</span></a></div>
                         </li>
                         <li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/3.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/3.jpg"></a></div>
                         	<div class="teachername"><a href="#">汪帆 <span class="hide">隐藏</span></a></div>
                         </li>
                         <li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/4.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/4.jpg"></a></div>
                         	<div class="teachername"><a href="#">刘勇 <span class="hide">隐藏</span></a></div>
                         </li>
                     </ul>
@@ -137,15 +165,15 @@
                 	<h3>大数据组</h3>
                 	<ul class="clearfix">
                     	<li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/1.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/1.jpg"></a></div>
                         	<div class="teachername"><a href="#">赵岚稹 <span class="hide">隐藏</span></a></div>
                         </li>
                         <li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/2.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/2.jpg"></a></div>
                         	<div class="teachername"><a href="#">何艳 <span class="hide">隐藏</span></a></div>
                         </li>
                         <li>
-                            <div class="touxiang"><a href="adminRecordList.html"><img src="../../static/images/touxiang/3.jpg"></a></div>
+                            <div class="touxiang"><a href="adminRecordList.html"><img src=".././images/touxiang/3.jpg"></a></div>
                         	<div class="teachername"><a href="#">汪帆 <span class="hide">隐藏</span></a></div>
                         </li>
                     </ul>
@@ -161,8 +189,8 @@
                         	<div class="touxiang"><a href="adminRecordList.html"><img src="images/touxiang/2.jpg"></a></div>
                         	<div class="teachername"><a href="#">何艳 <span class="hide">隐藏</span></a></div>
                         </li>
-                        
-                        
+
+
                     </ul>
                 </div>
                 <div class="group">
@@ -176,8 +204,8 @@
                         	<div class="touxiang"><a href="adminRecordList.html"><img src="images/touxiang/2.jpg"></a></div>
                         	<div class="teachername"><a href="#">何艳 <span class="hide">隐藏</span></a></div>
                         </li>
-                        
-                        
+
+
                     </ul>
                 </div>
             </div>
@@ -186,8 +214,8 @@
         	<div id="slidebar" class="fr">
                 <div id="teacher-info">
                     <div id="touxiang">
-                        <a href="#"><img src="../../static/images/touxiang.jpg" alt="管理员头像"></a></div>
-                    <h1 class="center">汪帆</h1>
+                        <a href="#"><img src=".././images/touxiang.jpg" alt="管理员头像" id="userImg"></a></div>
+                    <h1 class="center" id="username">汪帆</h1>
                 </div>
                 <nav id="teacher-menu">
                     <div id="menulist">
@@ -204,6 +232,27 @@
             </div>
         </aside>
 	</div>
+
+    <div class="changeAllWrap hide" id="changeAllWrap">
+        <div class="upload" id="upload">
+            <div style="text-align: center;margin: 20px 0">
+                <h2>图片上传</h2>
+                <div class="control-group">
+                    <img id="change_upload_img_tmp" height="200" width="320" style="margin: 20px 0">
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <input id="change_upload_img" class="form-control" readonly type="text">
+                            <label class="input-group-btn">
+                                <input id="change_file" type="file" name="file" style="left: -9999px; position: absolute;">
+                                <span style="background-color:#0f800a;padding: 2px 8px;color: white">添加图片</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="modifyImg" style="height:60px;width:300px;background-color:#334880;padding: 2px 8px;color: white;font-size: 26px">确定修改</button>
+        </div>
+    </div>
 </main>
 <footer id="footer-wrap">
 	<div id="footer">
@@ -220,7 +269,256 @@ $(function(){
 	$('.icon-close').click(function(){
 		$('.record-bg').addClass('hide');
 		})
-	})
+
+
+	});
+$("#btn-teacherSubmit").click(function (){
+
+});
+
+var user = null;
+
+$(function(){
+    if ($.cookie("user")==null || $.cookie("user") == undefined){
+        alert("请先登录");
+        window.location.href = ".././index.html";
+        return;
+    }else{
+        user = JSON.parse($.cookie("user"));
+        if (user.uFlag == 1){
+            alert("权限不足");
+            window.location.href = ".././teacher_fz.html";
+            return;
+        }
+        console.log(user)
+        $("#username").text(user.uUsername);
+        $("#userImg").attr("src", host+user.uImg);
+    }
+    init();
+});
+
+//html5实现图片预览功能
+$("#change_file").change(function (e) {
+    var file = e.target.files[0] || e.dataTransfer.files[0];
+    $('#change_upload_img').val(document.getElementById("change_file").files[0].name);
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            $("#change_upload_img_tmp").attr("src", this.result);
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+function init(){
+    findAllCourse();
+    findTeacherByCourse();
+}
+
+function findAllCourse(){
+    $("#career").empty();
+    $("#career").append($("<option>选择该老师所授专业</option>"));
+    $.ajax({
+        type : "GET",
+        url : host+"/course/findAll",
+        xhrFields : {
+            withCredentials : true
+        },
+        crossDomain : true,
+        success : function(result) {
+            console.log(result);
+            for(var i=0;i<result.data.length;i++){
+                // 初始化课程选择列表
+                $("#career").append($("<option value="+result.data[i].cName+">"+result.data[i].cName+"</option>"));
+            }
+        },
+        error : function(e){
+            alert("请求失败");
+        }
+    });
+}
+
+function findTeacherByCourse(){
+    //渲染全部老师
+    $("#teacher-list").empty();
+
+    $.ajax({
+        type : "GET",
+        url : host+"/teacher/findByCourse",
+        xhrFields : {
+            withCredentials : true
+        },
+        crossDomain : true,
+        success : function(result) {
+            console.log(result);
+            var str = "";
+            $.each(result.data,function(index,itemList){
+                str += "<div class=\"group\">\n" +
+                    "                \t<h3>"+index+"</h3>\n" +
+                    "                \t<ul class=\"clearfix\">\n";
+
+                    $.each(itemList,function(index,item){
+                        str +=         "                    \t<li>\n" +
+                                "<div style='display: none'>"+item.uId+"</div>"+
+                            "                            <div class=\"touxiang\"><a href=\"#\"><img src=\""+host+item.uImg+"\"></a></div>\n" +
+                            "                        \t<div class=\"teachername\"><a href=\"./adminRecordList_fz.html?name="+item.uName+"\">"+item.uName+" <span class=\"hide\">隐藏</span></a></div>\n" +
+                            "                        </li>\n";
+                    });
+                str +=         "                    </ul>\n" +
+                    "                </div>";
+            });
+            $("#teacher-list").append($(str));
+        },
+        error : function(e){
+            alert("请求失败");
+        }
+    });
+}
+
+//添加老师
+$("#btn-teacherSubmit").click(function(){
+    var uUsername = $("#newTeacherTel").val();
+    var uPassword = $("#newTeacherPwd1").val();
+    var uName = $("#newTeacher").val();
+    var uImg = document.getElementById("file").files[0];
+    var uCourse = $("#career").val();
+    var formData = new FormData();
+    formData.append('uUsername', uUsername);
+    formData.append('uPassword', uPassword);
+    formData.append('uName', uName);
+    formData.append('file', uImg);
+    formData.append('uCourse', uCourse);
+
+    console.log(formData);
+    $.ajax({
+        url: host+"/teacher/add",
+        type: "POST",
+        xhrFields : {
+            withCredentials : true
+        },
+        crossDomain : true,
+        data: formData,
+        cache:false,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            findTeacherByCourse();
+            $("#change-wrap").addClass("hide");
+            console.log(data);
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+    return false;
+})
+
+var uId = null;
+    $("#teacher-list").on("click", ".touxiang", function(){
+        uId = $(this).parent().children()[0].innerText;
+        var uImg =  $(this).parent().find("img").attr("src")
+        $("#changeAllWrap").removeClass("hide");
+        $("#change_upload_img_tmp").attr("src", uImg);
+    })
+
+//html5实现图片预览功能
+$("#file").change(function (e) {
+    var file = e.target.files[0] || e.dataTransfer.files[0];
+    $('#upload_img').val(document.getElementById("file").files[0].name);
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            $("#upload_img_tmp").attr("src", this.result);
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+//修改头像
+$("#modifyImg").click(function(){
+    var formData = new FormData();
+    formData.append("uId", uId);
+    formData.append("file", document.getElementById("change_file").files[0]);
+    $.ajax({
+        url: host+"/teacher/updateImg",
+        type: "POST",
+        xhrFields : {
+            withCredentials : true
+        },
+        crossDomain : true,
+        data: formData,
+        cache:false,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            $("#changeAllWrap").addClass("hide");
+            findTeacherByCourse();
+            console.log(data);
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+})
+    $("#upload").click(function(e){
+        event.stopPropagation();//阻止事件冒泡即可
+    })
+    $("#changeAllWrap").click(function () {
+        $("#changeAllWrap").addClass("hide");
+    })
+
+    $("#viewAll").click(function () {
+        findTeacherByCourse();
+    })
+
+
+    //搜索
+    $("#btn-teacher").click(function(){
+        var name = $("#teachername").val();
+        $.ajax({
+            //请求方式
+            type : "GET",
+            // //请求的媒体类型
+            // contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : host+"/teacher/findByName?name="+name,
+            xhrFields : {
+                withCredentials : true
+            },
+            crossDomain : true,
+            // //数据，json字符串
+            // data : JSON.stringify(list),
+            //请求成功
+            success : function(result) {
+                console.log(result);
+                if(result.data.length>0){
+                    $("#teacher-list").empty();
+                    var str = "<div class=\"group\">\n" +
+                        "                \t<h3></h3>\n" +
+                        "                \t<ul class=\"clearfix\">\n";
+
+                    $.each(result.data,function(index,item){
+                        str +=         "                    \t<li>\n" +
+                            "<div style='display: none'>"+item.uId+"</div>"+
+                            "                            <div class=\"touxiang\"><a href=\"#\"><img src=\""+host+item.uImg+"\"></a></div>\n" +
+                            "                        \t<div class=\"teachername\"><a href=\"./adminRecordList_fz.html?name="+item.uName+"\">"+item.uName+" <span class=\"hide\">隐藏</span></a></div>\n" +
+                            "                        </li>\n";
+                    });
+                    str +=         "                    </ul>\n" +
+                        "                </div>";
+                    $("#teacher-list").append($(str));
+                }else{
+                    alert("查不到相关老师!");
+                }
+
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+    });
 </script>
 </body>
 </html>

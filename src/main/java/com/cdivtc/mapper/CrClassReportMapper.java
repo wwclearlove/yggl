@@ -12,9 +12,10 @@ public interface CrClassReportMapper {
     public int addCrClassReport(CrClassReport crClassReport);
     public int deleteCrClassReport(String crId);
     public int fuyuanCrClassReport(String crId);
+    public int shengheCrClassReport(String crId);
     public int updateCrClassReport(@Param("crClassReport")CrClassReport crClassReport);
 
-    public List<CrClassReport> findAllCrClassReport();
+    public List<CrClassReport> findAllCrClassReport(Map<String,Object> map);
     public List<CrClassReport> findAllCrClassReportByTeacherw(Map<String,Object> map);
     public List<CrClassReport> findAllCrClassReportByTeachery(Map<String,Object> map);
     public List<CrClassReport> findAllCrClassReportByTeachers(Map<String,Object> map);

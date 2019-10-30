@@ -2,6 +2,7 @@ package com.cdivtc.web.controller;
 
 import com.cdivtc.model.*;
 import com.cdivtc.service.CtClassTimeService;
+import com.cdivtc.service.cCourseService;
 import com.cdivtc.util.IdWorker;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,19 @@ public class CtClassController {
     CtClassTimeService ctClassTimeService;
     @RequestMapping(value ="/add",method = RequestMethod.POST)
     public Result addCtClass(@RequestBody CtClassTime ctClassTime){
-
+        Result result=new Result();
+        System.out.println(ctClassTime);
+        if(ctClassTime.getCtTime().equals("")||ctClassTime.getCtTime().isEmpty()){
+            result.setMessage("添加的时间不能为空");
+            result.setSuccess(false);
+            return result;
+        }
+        CtClassTime byname = ctClassTimeService.findByname(ctClassTime.getCtTime());
+        if(byname!=null){
+            result.setMessage("添加的时间节点不能相同");
+            result.setSuccess(false);
+            return result;
+        }
         ctClassTime.setCtId(idWorker.nextId()+"");
         int i = ctClassTimeService.addClassTime(ctClassTime);
         if(i==1){

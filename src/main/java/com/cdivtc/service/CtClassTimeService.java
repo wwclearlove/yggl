@@ -1,5 +1,6 @@
 package com.cdivtc.service;
 
+import com.cdivtc.model.ClClassRoom;
 import com.cdivtc.model.CtClassTime;
 import com.cdivtc.model.PageBean;
 import org.apache.ibatis.annotations.Param;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 public interface CtClassTimeService {
     public int addClassTime(CtClassTime ctClassTime);
+    public CtClassTime findByname(String cName);
     public int deleteClassTime(String ctId);
     public int updateClassTime(CtClassTime ctClassTime);
     public PageBean<CtClassTime> findPage(Integer page, Integer row);

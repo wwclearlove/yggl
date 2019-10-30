@@ -29,4 +29,8 @@
     <select id="findAllCourse"  resultMap="pageMap">
         select * from c_course
     </select>
+    <select id="findCourseByname"  parameterType="java.lang.String" resultType="com.cdivtc.model.CCourse">
+        SELECT * FROM c_course
+        where c_name = #{cName}
+    </select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.cdivtc.util;
 
+import org.springframework.http.HttpRequest;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class CodeUtil {
@@ -28,14 +30,12 @@ public class CodeUtil {
      * @param request
      * @return
      */
-    public static boolean checkVerifyCode(HttpServletRequest request) {
+    public static boolean checkVerifyCode(HttpServletRequest  request, String yzm) {
         //获取生成的验证码
         String verifyCodeExpected = (String) request.getSession().getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
         System.out.println(verifyCodeExpected+"==============================");
-        //获取用户输入的验证码
-        String verifyCodeActual = CodeUtil.getString(request, "verifyCodeActual");
-        System.out.println(verifyCodeActual+"--------------------------");
-        if(verifyCodeActual == null ||!verifyCodeActual.equalsIgnoreCase(verifyCodeExpected)) {
+
+        if(yzm == null ||!yzm.equalsIgnoreCase(verifyCodeExpected)) {
             return false;
         }
         return true;
